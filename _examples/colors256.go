@@ -5,17 +5,15 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log"
 
-	" github.com/gvcgo/gocui"
+	"github.com/gvcgo/gocui"
 )
 
 func main() {
-	g, err := gocui.NewGui(gocui.NewGuiOpts{
-		OutputMode:      gocui.Output256,
-		SupportOverlaps: true,
-	})
+	g, err := gocui.NewGui(gocui.Output256)
 
 	if err != nil {
 		log.Panicln(err)
@@ -28,15 +26,15 @@ func main() {
 		log.Panicln(err)
 	}
 
-	if err := g.MainLoop(); err != nil && !gocui.IsQuit(err) {
+	if err := g.MainLoop(); err != nil && !errors.Is(err, gocui.ErrQuit) {
 		log.Panicln(err)
 	}
 }
 
 func layout(g *gocui.Gui) error {
 	maxX, maxY := g.Size()
-	if v, err := g.SetView("colors", -1, -1, maxX, maxY, 0); err != nil {
-		if !gocui.IsUnknownView(err) {
+	if v, err := g.SetView("colors", -1, -1, maxX, maxY); err != nil {
+		if !errors.Is(err, gocui.ErrUnknownView) {
 			return err
 		}
 

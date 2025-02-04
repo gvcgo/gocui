@@ -11,7 +11,7 @@ import (
 
 	"github.com/go-errors/errors"
 
-	" github.com/gvcgo/gocui"
+	"github.com/gvcgo/gocui"
 )
 
 const delta = 0.2

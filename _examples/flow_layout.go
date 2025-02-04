@@ -5,11 +5,12 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"strings"
 
-	" github.com/gvcgo/gocui"
+	"github.com/gvcgo/gocui"
 )
 
 type Label struct {
@@ -34,9 +35,9 @@ func NewLabel(name string, body string) *Label {
 }
 
 func (w *Label) Layout(g *gocui.Gui) error {
-	v, err := g.SetView(w.name, 0, 0, w.w, w.h, 0)
+	v, err := g.SetView(w.name, 0, 0, w.w, w.h)
 	if err != nil {
-		if !gocui.IsUnknownView(err) {
+		if !errors.Is(err, gocui.ErrUnknownView) {
 			return err
 		}
 		fmt.Fprint(v, w.body)
@@ -52,8 +53,8 @@ func flowLayout(g *gocui.Gui) error {
 	x := 0
 	for _, v := range views {
 		w, h := v.Size()
-		_, err := g.SetView(v.Name(), x, 0, x+w+1, h+1, 0)
-		if err != nil && !gocui.IsUnknownView(err) {
+		_, err := g.SetView(v.Name(), x, 0, x+w+1, h+1)
+		if err != nil && !errors.Is(err, gocui.ErrUnknownView) {
 			return err
 		}
 		x += w + 2
@@ -62,11 +63,7 @@ func flowLayout(g *gocui.Gui) error {
 }
 
 func main() {
-	opt := gocui.NewGuiOpts{
-		OutputMode:      gocui.OutputNormal,
-		SupportOverlaps: true,
-	}
-	g, err := gocui.NewGui(opt)
+	g, err := gocui.NewGui(gocui.OutputNormal)
 	if err != nil {
 		log.Panicln(err)
 	}
@@ -84,7 +81,7 @@ func main() {
 		log.Panicln(err)
 	}
 
-	if err := g.MainLoop(); err != nil && !gocui.IsQuit(err) {
+	if err := g.MainLoop(); err != nil && !errors.Is(err, gocui.ErrQuit) {
 		log.Panicln(err)
 	}
 }

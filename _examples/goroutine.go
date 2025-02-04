@@ -5,12 +5,13 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"sync"
 	"time"
 
-	" github.com/gvcgo/gocui"
+	"github.com/gvcgo/gocui"
 )
 
 const NumGoroutines = 20
@@ -24,11 +25,7 @@ var (
 )
 
 func main() {
-	opt := gocui.NewGuiOpts{
-		OutputMode:      gocui.OutputNormal,
-		SupportOverlaps: true,
-	}
-	g, err := gocui.NewGui(opt)
+	g, err := gocui.NewGui(gocui.OutputNormal)
 	if err != nil {
 		log.Panicln(err)
 	}
@@ -45,7 +42,7 @@ func main() {
 		go counter(g)
 	}
 
-	if err := g.MainLoop(); err != nil && !gocui.IsQuit(err) {
+	if err := g.MainLoop(); err != nil && !errors.Is(err, gocui.ErrQuit) {
 		log.Panicln(err)
 	}
 
@@ -53,8 +50,8 @@ func main() {
 }
 
 func layout(g *gocui.Gui) error {
-	if v, err := g.SetView("ctr", 2, 2, 22, 2+NumGoroutines+1, 0); err != nil {
-		if !gocui.IsUnknownView(err) {
+	if v, err := g.SetView("ctr", 2, 2, 22, 2+NumGoroutines+1); err != nil {
+		if !errors.Is(err, gocui.ErrUnknownView) {
 			return err
 		}
 		v.Clear()
@@ -102,7 +99,9 @@ func counter(g *gocui.Gui) {
 					x = 10
 				}
 				y := ctr % NumGoroutines
-				v.SetWritePos(x, y)
+				// v.SetWritePos(x, y)
+				v.SetOrigin(x, y)
+				// v.SetCursor(x, y)
 				fmt.Fprintln(v, n)
 				return nil
 			})

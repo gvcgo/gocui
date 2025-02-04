@@ -5,11 +5,12 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"strings"
 
-	" github.com/gvcgo/gocui"
+	"github.com/gvcgo/gocui"
 )
 
 const delta = 1
@@ -21,11 +22,7 @@ var (
 )
 
 func main() {
-	opt := gocui.NewGuiOpts{
-		OutputMode:      gocui.OutputNormal,
-		SupportOverlaps: true,
-	}
-	g, err := gocui.NewGui(opt)
+	g, err := gocui.NewGui(gocui.OutputNormal)
 	if err != nil {
 		log.Panicln(err)
 	}
@@ -33,7 +30,7 @@ func main() {
 
 	g.Highlight = true
 	g.SelFgColor = gocui.ColorRed
-	g.SelFrameColor = gocui.ColorRed
+	// g.SelFrameColor = gocui.ColorRed
 
 	g.SetManagerFunc(layout)
 
@@ -44,16 +41,16 @@ func main() {
 		log.Panicln(err)
 	}
 
-	if err := g.MainLoop(); err != nil && !gocui.IsQuit(err) {
+	if err := g.MainLoop(); err != nil && !errors.Is(err, gocui.ErrQuit) {
 		log.Panicln(err)
 	}
 }
 
 func layout(g *gocui.Gui) error {
 	maxX, _ := g.Size()
-	v, err := g.SetView("help", maxX-25, 0, maxX-1, 9, 0)
+	v, err := g.SetView("help", maxX-25, 0, maxX-1, 9)
 	if err != nil {
-		if !gocui.IsUnknownView(err) {
+		if !errors.Is(err, gocui.ErrUnknownView) {
 			return err
 		}
 		fmt.Fprintln(v, "KEYBINDINGS")
@@ -137,9 +134,9 @@ func initKeybindings(g *gocui.Gui) error {
 func newView(g *gocui.Gui) error {
 	maxX, maxY := g.Size()
 	name := fmt.Sprintf("v%v", idxView)
-	v, err := g.SetView(name, maxX/2-5, maxY/2-5, maxX/2+5, maxY/2+5, 0)
+	v, err := g.SetView(name, maxX/2-5, maxY/2-5, maxX/2+5, maxY/2+5)
 	if err != nil {
-		if !gocui.IsUnknownView(err) {
+		if !errors.Is(err, gocui.ErrUnknownView) {
 			return err
 		}
 		v.Wrap = true
@@ -188,7 +185,7 @@ func moveView(g *gocui.Gui, v *gocui.View, dx, dy int) error {
 	if err != nil {
 		return err
 	}
-	if _, err := g.SetView(name, x0+dx, y0+dy, x1+dx, y1+dy, 0); err != nil {
+	if _, err := g.SetView(name, x0+dx, y0+dy, x1+dx, y1+dy); err != nil {
 		return err
 	}
 	return nil

@@ -5,11 +5,12 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"os"
 
-	" github.com/gvcgo/gocui"
+	"github.com/gvcgo/gocui"
 	colorful "github.com/lucasb-eyer/go-colorful"
 )
 
@@ -17,11 +18,7 @@ var dark = false
 
 func main() {
 	os.Setenv("COLORTERM", "truecolor")
-	opt := gocui.NewGuiOpts{
-		OutputMode:      gocui.OutputTrue,
-		SupportOverlaps: true,
-	}
-	g, err := gocui.NewGui(opt)
+	g, err := gocui.NewGui(gocui.OutputNormal)
 
 	if err != nil {
 		log.Panicln(err)
@@ -47,7 +44,7 @@ func main() {
 		log.Panicln(err)
 	}
 
-	if err := g.MainLoop(); err != nil && !gocui.IsQuit(err) {
+	if err := g.MainLoop(); err != nil && !errors.Is(err, gocui.ErrQuit) {
 		log.Panicln(err)
 	}
 }
@@ -63,12 +60,13 @@ func layout(g *gocui.Gui) error {
 		cols = maxX
 	}
 
-	if v, err := g.SetView("colors", 0, 0, cols-1, rows-1, 0); err != nil {
-		if !gocui.IsUnknownView(err) {
+	if v, err := g.SetView("colors", 0, 0, cols-1, rows-1); err != nil {
+		if !errors.Is(err, gocui.ErrUnknownView) {
 			return err
 		}
 
-		v.FrameColor = gocui.GetColor("#FFAA55")
+		// v.FrameColor = gocui.GetColor("#FFAA55")
+		// v.Frame = true
 		displayHsv(v)
 
 		if _, err := g.SetCurrentView("colors"); err != nil {

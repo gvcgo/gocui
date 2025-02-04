@@ -13,7 +13,7 @@ import (
 	"log"
 	"os"
 
-	" github.com/gvcgo/gocui"
+	"github.com/gvcgo/gocui"
 )
 
 func main() {
