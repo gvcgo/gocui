@@ -9,7 +9,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/jesseduffield/gocui"
+	" github.com/gvcgo/gocui"
 	colorful "github.com/lucasb-eyer/go-colorful"
 )
 

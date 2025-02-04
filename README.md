@@ -21,7 +21,7 @@ Minimalist Go package aimed at creating Console User Interfaces.
 Execute:
 
 ```sh
-go get github.com/jroimartin/gocui
+go get" github.com/gvcgo/gocui"
 ```
 
 ## Documentation
@@ -29,7 +29,7 @@ go get github.com/jroimartin/gocui
 Execute:
 
 ```sh
-go doc github.com/jroimartin/gocui
+go doc" github.com/gvcgo/gocui"
 ```
 
 Or visit [pkg.go.dev](https://pkg.go.dev/github.com/jroimartin/gocui) to read

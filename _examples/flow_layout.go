@@ -9,7 +9,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/jesseduffield/gocui"
+	" github.com/gvcgo/gocui"
 )
 
 type Label struct {

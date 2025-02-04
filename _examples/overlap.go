@@ -7,7 +7,7 @@ package main
 import (
 	"log"
 
-	"github.com/jesseduffield/gocui"
+	" github.com/gvcgo/gocui"
 )
 
 func layout(g *gocui.Gui) error {

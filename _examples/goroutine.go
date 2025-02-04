@@ -10,7 +10,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/jesseduffield/gocui"
+	" github.com/gvcgo/gocui"
 )
 
 const NumGoroutines = 20
