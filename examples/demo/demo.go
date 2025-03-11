@@ -7,8 +7,8 @@ package main
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
+	"os"
 	"strings"
 
 	"github.com/gvcgo/gocui"
@@ -108,7 +108,7 @@ func keybindings(g *gocui.Gui) error {
 }
 
 func saveMain(g *gocui.Gui, v *gocui.View) error {
-	f, err := ioutil.TempFile("", "gocui_demo_")
+	f, err := os.CreateTemp("", "gocui_demo_")
 	if err != nil {
 		return err
 	}
@@ -134,7 +134,7 @@ func saveMain(g *gocui.Gui, v *gocui.View) error {
 }
 
 func saveVisualMain(g *gocui.Gui, v *gocui.View) error {
-	f, err := ioutil.TempFile("", "gocui_demo_")
+	f, err := os.CreateTemp("", "gocui_demo_")
 	if err != nil {
 		return err
 	}
@@ -166,7 +166,8 @@ func layout(g *gocui.Gui) error {
 		if !gocui.IsUnknownView(err) {
 			return err
 		}
-		b, err := ioutil.ReadFile("Mark.Twain-Tom.Sawyer.txt")
+		b, err := os.ReadFile("../Mark.Twain-Tom.Sawyer.txt")
+
 		if err != nil {
 			panic(err)
 		}
