@@ -8,11 +8,14 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/awesome-gocui/gocui"
+	"github.com/gvcgo/gocui"
 )
 
 func main() {
-	g, err := gocui.NewGui(gocui.OutputNormal, true)
+	opt := gocui.NewGuiOpts{
+		OutputMode: gocui.OutputNormal,
+	}
+	g, err := gocui.NewGui(opt)
 	if err != nil {
 		log.Fatalln(err)
 	}

@@ -9,7 +9,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/awesome-gocui/gocui"
+	"github.com/gvcgo/gocui"
 )
 
 func layout(g *gocui.Gui) error {
@@ -36,7 +36,10 @@ func quit(g *gocui.Gui, v *gocui.View) error {
 }
 
 func main() {
-	g, err := gocui.NewGui(gocui.OutputNormal, true)
+	opt := gocui.NewGuiOpts{
+		OutputMode: gocui.OutputNormal,
+	}
+	g, err := gocui.NewGui(opt)
 	if err != nil {
 		log.Panicln(err)
 	}

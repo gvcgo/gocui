@@ -13,11 +13,14 @@ import (
 	"log"
 	"os"
 
-	"github.com/awesome-gocui/gocui"
+	"github.com/gvcgo/gocui"
 )
 
 func main() {
-	g, err := gocui.NewGui(gocui.OutputNormal, true)
+	opt := gocui.NewGuiOpts{
+		OutputMode: gocui.OutputNormal,
+	}
+	g, err := gocui.NewGui(opt)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -104,9 +107,7 @@ func scrollView(v *gocui.View, dy int) error {
 	if v != nil {
 		v.Autoscroll = false
 		ox, oy := v.Origin()
-		if err := v.SetOrigin(ox, oy+dy); err != nil {
-			return err
-		}
+		v.SetOrigin(ox, oy+dy)
 	}
 	return nil
 }

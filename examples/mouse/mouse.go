@@ -8,11 +8,14 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/awesome-gocui/gocui"
+	"github.com/gvcgo/gocui"
 )
 
 func main() {
-	g, err := gocui.NewGui(gocui.OutputNormal, true)
+	opt := gocui.NewGuiOpts{
+		OutputMode: gocui.OutputNormal,
+	}
+	g, err := gocui.NewGui(opt)
 	if err != nil {
 		log.Panicln(err)
 	}
@@ -87,14 +90,14 @@ func quit(g *gocui.Gui, v *gocui.View) error {
 
 func showMsg(g *gocui.Gui, v *gocui.View) error {
 	var l string
-	var err error
+	var ok bool
 
 	if _, err := g.SetCurrentView(v.Name()); err != nil {
 		return err
 	}
 
 	_, cy := v.Cursor()
-	if l, err = v.Line(cy); err != nil {
+	if l, ok = v.Line(cy); !ok {
 		l = ""
 	}
 

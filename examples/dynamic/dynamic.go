@@ -9,7 +9,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/awesome-gocui/gocui"
+	"github.com/gvcgo/gocui"
 )
 
 const delta = 1
@@ -21,7 +21,10 @@ var (
 )
 
 func main() {
-	g, err := gocui.NewGui(gocui.OutputNormal, true)
+	opt := gocui.NewGuiOpts{
+		OutputMode: gocui.OutputNormal,
+	}
+	g, err := gocui.NewGui(opt)
 	if err != nil {
 		log.Panicln(err)
 	}

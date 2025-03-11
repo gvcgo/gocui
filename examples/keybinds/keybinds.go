@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/awesome-gocui/gocui"
+	"github.com/gvcgo/gocui"
 )
 
 // layout generates the view
@@ -31,7 +31,10 @@ func quit(_ *gocui.Gui, _ *gocui.View) error {
 
 func main() {
 	// Create a gui
-	g, err := gocui.NewGui(gocui.OutputNormal, false)
+	opt := gocui.NewGuiOpts{
+		OutputMode: gocui.OutputNormal,
+	}
+	g, err := gocui.NewGui(opt)
 	if err != nil {
 		log.Panicln(err)
 	}

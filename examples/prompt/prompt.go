@@ -3,12 +3,17 @@ package main
 import (
 	"log"
 
-	"github.com/jesseduffield/gocui"
+	"github.com/gvcgo/gocui"
 )
 
 func main() {
 
-	g, err := gocui.NewGui(gocui.OutputNormal, true, gocui.NORMAL, false)
+	opt := gocui.NewGuiOpts{
+		OutputMode:      gocui.OutputNormal,
+		SupportOverlaps: true,
+		Headless:        false,
+	}
+	g, err := gocui.NewGui(opt)
 	g.Cursor = true
 	if err != nil {
 		log.Panicln(err)
@@ -17,7 +22,7 @@ func main() {
 
 	g.SetManagerFunc(layout)
 
-	if err := g.SetKeybinding("", nil, gocui.KeyCtrlC, gocui.ModNone, quit); err != nil {
+	if err := g.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone, quit); err != nil {
 		log.Panicln(err)
 	}
 
